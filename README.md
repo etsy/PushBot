@@ -30,48 +30,31 @@ USAGE
 
 Join #pushbot to play around with pushbot and see how it works.
 
-Examples
-========
+An Example
+==========
 
 Let's say you're in an IRC channel named #push and it has the initial topic "clear". PushBot
 can help organize a push queue.
 
-    TOPIC: clear
-
-    asm> .join
-    gio> .join with asm
-    pushbot> asm, gio: You're up
-
-    TOPIC: asm + gio
-
-    gio> .good
-    asm> .good
-
-    TOPIC: asm* + gio*
-
-    pushbot> gio, asm: Everyone is ready
-
-    adam> .join
-
-    TOPIC: asm* + gio* | adam
-
-    asm> .at preprod
-
-    TOPIC: <preprod> asm + gio | adam
-
-    asm> .good
-    gio> .good
-    pushbot> asm, gio: Everyone is ready
-
-    asm> .at prod
-    asm> .good
-    gio> .good
-    pushbot> asm, gio: Everyone is ready
-    asm> .done
-
-    TOPIC adam
-
-    pushbot> adam: You're up
+                                           TOPIC: clear
+      alice> .join                         TOPIC: alice
+        bob> .join with alice              TOPIC: alice + bob
+    pushbot> alice, bob: You're up         TOPIC: alice + bob
+        bob> .good                         TOPIC: alice + bob*
+      alice> .good                         TOPIC: alice* + bob*
+    pushbot> alice, bob: Everyone is ready TOPIC: alice* + bob*
+      carol> .join                         TOPIC: alice* + bob* | carol
+      alice> .at preprod                   TOPIC: <preprod> alice + bob | carol
+      alice> .good                         TOPIC: <preprod> alice* + bob | carol
+        bob> .good                         TOPIC: <preprod> alice* + bob* | carol
+    pushbot> alice, bob: Everyone is ready TOPIC: <preprod> alice* + bob* | carol
+      alice> .at prod                      TOPIC: <prod> alice + bob | carol
+      alice> .good                         TOPIC: <prod> alice* + bob | carol
+       dave> .join                         TOPIC: <prod> alice* + bob | carol + dave
+        bob> .good                         TOPIC: <prod> alice* + bob* | carol + dave
+    pushbot> alice, bob: Everyone is ready TOPIC: <prod> alice* + bob* | carol + dave
+      alice> .done                         TOPIC: carol + dave
+    pushbot> carol, dave: You're up        TOPIC: carol + dave
 
 
 Configuring PushBot For Your Handle
