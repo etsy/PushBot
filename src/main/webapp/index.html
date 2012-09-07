@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="PushBot Config" />
+    <meta name="language" content="en/US" />
+    <title>PushBot Config</title>
+    <link rel="stylesheet" type="text/css"  href="css/vendor/reset-fonts-grids.css" /> 
+    <style>
+      body { display: none; }
+    </style>
+    <link rel="stylesheet/less" href="css/style.less" type="text/css" />
+    <script type="text/javascript" data-main="js/main.js" src="js/vendor/allplugins-require.js"></script>
+  </head>
+  <body>
+      <section id="memberName" class="form">
+        <fieldset>
+            <dl>
+                <dt>
+                  <label for="inputMember">IRC Handle</label>
+                </dt>
+                <dd>
+                  <input id="inputMember" type="text" value=""/>
+                </dd>
+            </dl>
+        </fieldset>
+      </section>
+      <section id="memberConfig" class="form hidden">
+        <h1>Settings for <span id="spanMemberName"></span></h1>
+        <h2>Noise Level</h3>
+        <fieldset>
+            <dl>
+                <dt>
+                  <label for="inputQuietDrive">Try to be quiet when I'm driving</label>
+                  <input id="inputQuietDrive" type="checkbox" name="quietDrive" />
+                </dt>
+                <dd>
+                  <div class="note">
+                      This will inhibit some topic changes and announcements
+                      while you're driving. 
+                  </div>
+                </dd>
+            </dl>
+        </fieldset>
+        <h2>Notifo</h3>
+        <fieldset>
+            <dl>
+                <dt>
+                  <label for="inputSendNotifoWhenUp">Send me a Notifo message when its my turn</label>
+                  <input id="inputSendNotifoWhenUp" type="checkbox" name="sendNotifoWhenUp" />
+                </dt>
+                <dd>
+                    <div class="note">
+                        PushBot will attempt to send you a <a href="http://notifo.com">notifo</a> message once
+                        you're at the head of the push queue.
+                    </div>
+                </dd>
+                <dt>
+                <label for="inputNotifoUsername">Notifo Username</label>
+                </dt>
+                <dd>
+                <input id="inputNotifoUsername" type="text" name="notifoUsername" />
+                </dd>
+                <dt>
+                <label for="inputNotifoApiSecret">Notifo API Secret</label>
+                </dt>
+                <dd>
+                <input id="inputNotifoApiSecret" type="text" name="notifoApiSecret" />
+                </dd>
+            </dl>
+        </fieldset>
+      </section>
+ </body>
+</html>

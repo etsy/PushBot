@@ -1,0 +1,46 @@
+.button
+{
+  .roundedCorners(4px);
+  padding: 2px 10px 2px 10px;
+  white-space: nowrap;
+  display: inline-block;
+  cursor: pointer;
+
+  .gradientBackgroundTop(#fff,#ccc);
+  .boxShadow(1px, 1px, 1px, #eee);
+  border: 1px solid #eee;
+  color: #666;
+  text-shadow: #fff 1px 1px 1px;
+  border-bottom: 1px solid #eee;
+
+  font-family: helvetica, arial, sans-serif;
+  font-weight: 500;
+  font-size: 12pt;
+  letter-spacing: 0.06em;
+  text-transform: capitalize;
+  word-spacing: -1px;
+  text-decoration: none;
+}
+
+.button::-moz-selection,
+.button::-webkit-selection,
+.button::selection {
+   background-color: transparent;
+}
+
+.disabled
+{
+   cursor: inherit !important;
+   opacity: 0.5;
+}
+
+.button:not(.disabled):hover
+{
+  color: #333;
+}
+
+.button:not(.disabled):hover:active
+{ 
+  .gradientBackground(#fff,#ddd);
+  .boxShadow(0,0,0,#fff);
+}

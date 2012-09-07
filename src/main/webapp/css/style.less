@@ -1,0 +1,106 @@
+@import "definitions.less";
+@import "buttons.less";
+
+body {
+   display: inherit;
+   text-align: left;
+   width: 500px;
+   margin: 100px auto;
+}
+
+.hidden {
+   display: none;
+}
+
+a {
+  text-decoration: none;
+  color: #2A41D4;
+}
+
+.form
+{ 
+  .roundedCorners(6px);
+  background-color: #f7f7f7;
+  width: 410px;
+  padding: 20px 20px 20px 20px;
+
+  h1
+  {
+     color: #666;
+     font-size: 16pt;
+     margin-bottom: 20px;
+  }
+
+  h2
+  { 
+    color: #777;
+    font-size: 14pt;
+    margin-bottom: 15px;
+  }
+
+  fieldset
+  { 
+    dl
+    { 
+      margin-bottom: 20px;
+
+      dt
+      {
+        margin-bottom: 3px;
+
+        label
+        { 
+          color: #888;
+          font-size: 12pt;
+        }
+
+        input[type=checkbox],label {
+            cursor: pointer
+        }
+      }
+
+      dd
+      {
+        padding-bottom: 20px;
+
+        input
+        {
+          /* structure */
+          .roundedCorners(3px);
+          padding: 3px 3px 3px 3px;
+          width: 400px;
+
+          /* look+feel */
+          .gradientBackground(#fff,#eee);
+          border: 1px solid #ddd;
+          color: #555;
+          text-shadow: #ccc 1px 1px 1px;
+
+          /* typography */
+          font-size: 14pt;
+        }
+
+        .note
+        { 
+          font-size: 8pt;
+          font-weight: lighter;
+          color: #999;
+          padding: 0 3px 0 0px;
+        }
+      }
+    }
+  }
+}
+
+label.error
+{
+  .roundedCorners(6px);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin: 0 0 0 2px;
+  padding: 0px 5px 1px 5px;
+  color: #555;
+  background-color: #ffc;
+}
+
+
