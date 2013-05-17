@@ -72,7 +72,7 @@ Tricks For Suppressing Pushbot Topic Change Spam
 
 ### Colloquy
 
-Edit the CSS for your chosen style. If you're suing "DecafBland - Inverted", for instance, you should open the file
+Edit the CSS for your chosen style. If you're using "DecafBland - Inverted", for instance, you should open the file
 
     /Applications/Colloquy.app/Contents/Resources/Styles/DecafBland.colloquyStyle/Contents/Resources/Variants/Inverted.css
 
