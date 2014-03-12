@@ -111,7 +111,7 @@ WHITESPACE
   ;
 
 STRING
-  : ('a'..'z'|'A'..'Z'|'0'..'9'|'_')+
+  : ('a'..'z'|'A'..'Z'|'0'..'9'|'_'|'-')+
   ;
 
 MEMBER_DELIMITER
