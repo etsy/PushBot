@@ -1,5 +1,12 @@
 PushBot is an IRC bot that manages the topic in an IRC channel that has a push train.
 
+
+This is an archived project
+===========================
+
+Pushbot is no longer actively maintained and is no longer in sync with the version used internally at Etsy.
+
+
 USAGE
 =====
 
