@@ -1,13 +1,14 @@
 package com.etsy.pushbot;
 
 import com.etsy.pushbot.command.TrainCommand;
+import com.etsy.pushbot.config.ConfigServer;
+import com.etsy.pushbot.config.Status;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import com.etsy.pushbot.config.ConfigServer;
-import com.etsy.pushbot.config.Status;
-import org.apache.commons.cli.CommandLineParser;
+import javax.net.ssl.SSLSocketFactory;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -258,6 +259,10 @@ public class PushBot extends PircBot
     option.setRequired(false);
     options.addOption(option);
 
+    option = new Option("s", "ssl",  false, "Use SSL");
+    option.setRequired(false);
+    options.addOption(option);
+
     option = new Option("g", "graphite-enabled",  false, "Set to true to log stats to graphite");
     options.addOption(option);
 
@@ -280,6 +285,7 @@ public class PushBot extends PircBot
       System.err.println("  -h,--irc-host            IRCD hostname");
       System.err.println("  -p,--irc-port            IRCD port");
       System.err.println("  -a,--irc-passwod         Optional IRCD server password");
+      System.err.println("  -s,--ssl                 Connect using SSL");
       System.err.println("  -g,--graphite-enabled    Enable graphite logging");
       System.err.println("  -r,--graphite-host       Graphite hostname");
       System.err.println("  -t,--graphite-port       Graphite port");
@@ -299,11 +305,19 @@ public class PushBot extends PircBot
           commandLine.getOptionValue('r', null),
           Integer.valueOf(commandLine.getOptionValue('t', "2003")));
 
+    SSLSocketFactory socketFactory = null;
+
+    if (commandLine.hasOption('s')) {
+        socketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+    }
+
     // Connect to IRCD
     pushBot.connect(
         commandLine.getOptionValue('h'),
         Integer.valueOf(commandLine.getOptionValue('p')),
-        commandLine.getOptionValue('a', null));
+        commandLine.getOptionValue('a', null),
+        socketFactory
+    );
 
     // Launch the web interface
     ConfigServer configServer = new ConfigServer(pushBot);

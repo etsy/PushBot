@@ -11,17 +11,33 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jersey-version>1.6</jersey-version>
   </properties>
+  <repositories>
+    <repository>
+      <id>pircbot</id>
+      <url>file://${project.basedir}/repository/</url>
+    </repository>
+  </repositories>
   <dependencies>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <!--
     <dependency>
       <groupId>pircbot</groupId>
       <artifactId>pircbot</artifactId>
       <version>1.5.0</version>
+    </dependency>
+    -->
+    <dependency>
+      <groupId>pircbot</groupId>
+      <artifactId>pircbot-ssl</artifactId>
+      <version>1.5.0</version>
+      <!--<scope>system</scope>-->
+      <!--<systemPath>${project.basedir}/dependency/pircbot-1.5.0-ssl.jar</systemPath>-->
     </dependency>
     <dependency>
       <groupId>org.antlr</groupId>
@@ -85,6 +101,11 @@
       <version>1.2</version>
     </dependency>
     <dependency>
+    <groupId>commons-httpclient</groupId>
+	    <artifactId>commons-httpclient</artifactId>
+	    <version>3.1</version>
+    </dependency>
+    <dependency>
         <groupId>org.xerial</groupId>
         <artifactId>sqlite-jdbc</artifactId>
         <version>3.6.10</version>
@@ -98,6 +119,15 @@
   <build>
     <finalName>PushBot</finalName>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.0.2</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.antlr</groupId>
         <artifactId>antlr3-maven-plugin</artifactId>
@@ -140,6 +170,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.0</version>
         <configuration>
           <archive>
             <manifest>
