@@ -18,10 +18,19 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <!--
     <dependency>
       <groupId>pircbot</groupId>
       <artifactId>pircbot</artifactId>
       <version>1.5.0</version>
+    </dependency>
+    -->
+    <dependency>
+      <groupId>pircbot</groupId>
+      <artifactId>pircbot</artifactId>
+      <version>1.5.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/dependency/pircbot-1.5.0-ssl.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>org.antlr</groupId>

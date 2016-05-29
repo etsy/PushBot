@@ -1,13 +1,14 @@
 package com.etsy.pushbot;
 
 import com.etsy.pushbot.command.TrainCommand;
+import com.etsy.pushbot.config.ConfigServer;
+import com.etsy.pushbot.config.Status;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import com.etsy.pushbot.config.ConfigServer;
-import com.etsy.pushbot.config.Status;
-import org.apache.commons.cli.CommandLineParser;
+import javax.net.ssl.SSLSocketFactory;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -303,7 +304,9 @@ public class PushBot extends PircBot
     pushBot.connect(
         commandLine.getOptionValue('h'),
         Integer.valueOf(commandLine.getOptionValue('p')),
-        commandLine.getOptionValue('a', null));
+        commandLine.getOptionValue('a', null),
+        (SSLSocketFactory)SSLSocketFactory.getDefault()
+    );
 
     // Launch the web interface
     ConfigServer configServer = new ConfigServer(pushBot);
