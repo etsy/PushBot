@@ -259,6 +259,10 @@ public class PushBot extends PircBot
     option.setRequired(false);
     options.addOption(option);
 
+    option = new Option("s", "ssl",  false, "Use SSL");
+    option.setRequired(false);
+    options.addOption(option);
+
     option = new Option("g", "graphite-enabled",  false, "Set to true to log stats to graphite");
     options.addOption(option);
 
@@ -281,6 +285,7 @@ public class PushBot extends PircBot
       System.err.println("  -h,--irc-host            IRCD hostname");
       System.err.println("  -p,--irc-port            IRCD port");
       System.err.println("  -a,--irc-passwod         Optional IRCD server password");
+      System.err.println("  -s,--ssl                 Connect using SSL");
       System.err.println("  -g,--graphite-enabled    Enable graphite logging");
       System.err.println("  -r,--graphite-host       Graphite hostname");
       System.err.println("  -t,--graphite-port       Graphite port");
@@ -300,12 +305,18 @@ public class PushBot extends PircBot
           commandLine.getOptionValue('r', null),
           Integer.valueOf(commandLine.getOptionValue('t', "2003")));
 
+    SSLSocketFactory socketFactory = null;
+
+    if (commandLine.hasOption('s')) {
+        socketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+    }
+
     // Connect to IRCD
     pushBot.connect(
         commandLine.getOptionValue('h'),
         Integer.valueOf(commandLine.getOptionValue('p')),
         commandLine.getOptionValue('a', null),
-        (SSLSocketFactory)SSLSocketFactory.getDefault()
+        socketFactory
     );
 
     // Launch the web interface
