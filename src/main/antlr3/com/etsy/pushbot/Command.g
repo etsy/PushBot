@@ -84,6 +84,18 @@ command returns [ TrainCommand value ]
     { $value = new ConfigCommand(); }
   | PB 'kick' WHITESPACE member
     { $value = new NevermindCommand(); ((NevermindCommand)$value).setMember($member.text); }
+  | 'STAGING deployed by '
+    {
+      $value = new MultiCommand();
+      ((MultiCommand)$value).addCommand(new AtCommand("staging", "#push"));
+      ((MultiCommand)$value).addCommand(new AnnounceCommand("Your code is on staging", "#push"));
+    }
+  | 'PRODUCTION web push started by '
+    { $value = new AtCommand("prod", "#push"); }
+  | 'PRODUCTION deployed by '
+    {
+    $value = new AnnounceCommand("Your code is live. Time to watch graphs: https://app.datadoghq.com/dash/list", "#push");
+    }
   ;
 
 member
