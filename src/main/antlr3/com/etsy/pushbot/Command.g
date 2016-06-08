@@ -90,7 +90,7 @@ command returns [ TrainCommand value ]
       ((MultiCommand)$value).addCommand(new AtCommand("staging", "#push"));
       ((MultiCommand)$value).addCommand(new AnnounceCommand("Your code is on staging", "#push"));
     }
-  | 'PRODUCTION web push started by '
+  | 'web production deploy started by '
     { $value = new AtCommand("prod", "#push"); }
   | 'PRODUCTION deployed by '
     {
