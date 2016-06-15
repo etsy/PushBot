@@ -95,7 +95,7 @@ public class PushTrain extends LinkedList<PushToken>
   public void onNewHead(PushBot pushBot, String channel, String sender) {
       PushToken head = get(0);
       if(head != null && head instanceof MemberList) {
-          pushBot.sendMessage(channel, getHeadMember() + ": You're up");
+          pushBot.sendMessage(channel, "@" + getHeadMember() + ": You're up");
           if(isQuietPush()) {
               pushBot.sendMessage(channel, getDriver().getName()
                       + " has asked me to be quiet for this push");

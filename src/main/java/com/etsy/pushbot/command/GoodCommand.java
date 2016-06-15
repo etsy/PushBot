@@ -26,7 +26,7 @@ public class GoodCommand
             if(sender.equals(member.getName())) {
                 member.setStatus("*");
                 if(((MemberList)token).isEveryoneReady()) {
-                    pushBot.sendMessage(channel, pushTrain.getHeadMember() + ": everyone is ready");
+                    pushBot.sendMessage(channel, "@" + pushTrain.getHeadMember() + ": everyone is ready");
                 }
                 return;
             }
