@@ -1,7 +1,7 @@
 package com.etsy.pushbot;
 
 import com.etsy.pushbot.command.TrainCommand;
-import java.io.StringBufferInputStream;
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.ANTLRInputStream;
@@ -13,7 +13,7 @@ public class CommandReader {
   public static List<TrainCommand> parse(String message) {
     try {
       ANTLRInputStream input =
-        new ANTLRInputStream(new StringBufferInputStream(message));
+        new ANTLRInputStream(new ByteArrayInputStream(message.getBytes("UTF-8")));
 
       CommandLexer commandLexer =
         new CommandLexer(input);

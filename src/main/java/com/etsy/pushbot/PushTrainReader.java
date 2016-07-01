@@ -1,6 +1,6 @@
 package com.etsy.pushbot;
 
-import java.io.StringBufferInputStream;
+import java.io.ByteArrayInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.ANTLRInputStream;
 
@@ -11,7 +11,7 @@ public class PushTrainReader {
   public static PushTrain parse(String pushTrainString) {
     try {
       ANTLRInputStream input =
-        new ANTLRInputStream(new StringBufferInputStream(pushTrainString));
+        new ANTLRInputStream(new ByteArrayInputStream(pushTrainString.getBytes("UTF-8")));
 
       PushTrainLexer pushTrainLexer =
         new PushTrainLexer(input);
