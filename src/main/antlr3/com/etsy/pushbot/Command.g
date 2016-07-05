@@ -94,7 +94,7 @@ command returns [ TrainCommand value ]
     { $value = new AtCommand("prod", "#push"); }
   | 'PRODUCTION deployed by '
     {
-    $value = new AnnounceCommand("Your code is live. Time to watch graphs: https://app.datadoghq.com/dash/list", "#push");
+    $value = new AnnounceCommand("Your code is live. Time to watch graphs: https://app.datadoghq.com/dash/151383/deploy-dashboard", "#push");
     }
   ;
 
