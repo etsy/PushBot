@@ -5,6 +5,7 @@ package com.etsy.pushbot;
 
 import com.etsy.pushbot.command.*;
 import java.util.LinkedList;
+import org.apache.log4j.Logger;
 }
 
 @lexer::header {
@@ -15,8 +16,10 @@ import java.util.LinkedList;
 @parser::members {
     @Override
     public void reportError(RecognitionException e) {
+        logger.error("Error Reported", e);
         return;
     }
+    private static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("com.etsy.pushbot.parser");
 }
 
 @lexer::members {
@@ -87,14 +90,14 @@ command returns [ TrainCommand value ]
   | 'STAGING deployed by '
     {
       $value = new MultiCommand();
-      ((MultiCommand)$value).addCommand(new AtCommand("staging", "#push"));
-      ((MultiCommand)$value).addCommand(new AnnounceCommand("Your code is on staging", "#push"));
+      ((MultiCommand)$value).addCommand(new AtCommand("staging"));
+      ((MultiCommand)$value).addCommand(new AnnounceCommand("Your code is on staging"));
     }
   | 'web production deploy started by '
-    { $value = new AtCommand("prod", "#push"); }
+    { $value = new AtCommand("prod"); }
   | 'PRODUCTION deployed by '
     {
-    $value = new AnnounceCommand("Your code is live. Time to watch graphs: https://app.datadoghq.com/dash/151383/deploy-dashboard", "#push");
+    $value = new AnnounceCommand("Your code is live. Time to watch graphs: https://app.datadoghq.com/dash/151383/deploy-dashboard");
     }
   ;
 

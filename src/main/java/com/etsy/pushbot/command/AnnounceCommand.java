@@ -3,12 +3,20 @@ package com.etsy.pushbot.command;
 import com.etsy.pushbot.*;
 import com.etsy.pushbot.tokens.MemberList;
 import com.etsy.pushbot.tokens.PushToken;
+import org.apache.log4j.Logger;
 
 public class AnnounceCommand
   extends TrainCommand {
 
+  private static Logger log = Logger.getLogger(AnnounceCommand.class);
+
   private String message;
   private String channel;
+
+  public AnnounceCommand(String message) {
+    this.message = message;
+    this.channel = null;
+  }
 
   public AnnounceCommand(String message, String channel) {
     this.message = message;
@@ -19,7 +27,11 @@ public class AnnounceCommand
                         PushTrain pushTrain,
                         String channel,
                         String sender) {
-    if(!channel.equals(this.channel)) {
+    // Do not make announcement if it is to a different channel than
+    // we are configured for, unless we didn't configurea a channel,
+    // in which case go for it.
+    if(this.channel != null && !channel.equals(this.channel)) {
+        log.warn("Announce to different channel, not sending");
         return;
     }
 
@@ -31,8 +43,12 @@ public class AnnounceCommand
         for(Member member : ((MemberList)token)) {
             memberNames += member.getName() + " ";
         }
-        if(null != this.message && ((MemberList)token).size() > 1) {
-            pushBot.sendMessage(channel, memberNames + ": " + this.message);
+        if(null != this.message) {
+            String msg = this.message;
+            if (((MemberList)token).size() > 1) {
+                msg = memberNames + ": " + msg;
+            }
+            pushBot.sendMessage(channel, msg);
         }
         return;
     }
