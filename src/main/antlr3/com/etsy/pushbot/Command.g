@@ -87,7 +87,7 @@ command returns [ TrainCommand value ]
     { $value = new ConfigCommand(); }
   | PB 'kick' WHITESPACE member
     { $value = new NevermindCommand(); ((NevermindCommand)$value).setMember($member.text); }
-  | 'STAGING deployed by '
+  | 'STAGING web deployed by '
     {
       $value = new MultiCommand();
       ((MultiCommand)$value).addCommand(new AtCommand("staging"));
