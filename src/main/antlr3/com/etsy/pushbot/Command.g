@@ -95,7 +95,7 @@ command returns [ TrainCommand value ]
     }
   | 'web production deploy started by '
     { $value = new AtCommand("prod"); }
-  | 'PRODUCTION deployed by '
+  | 'PRODUCTION web deployed by '
     {
     $value = new AnnounceCommand("Your code is live. Time to watch graphs: https://app.datadoghq.com/dash/151383/deploy-dashboard");
     }
