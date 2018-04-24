@@ -13,81 +13,33 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.jibble.pircbot.PircBot;
+import com.etsy.PlackBot;
+import com.etsy.ChannelNotFoundException;
 
 /**
  * This is the main entry-point for PushBot
  */
-public class PushBot extends PircBot
+public class PushBot extends PlackBot
 {
   HashMap<String,ChannelInfo> channelInfoMap =
     new HashMap<String,ChannelInfo>();
 
-  private GraphiteLogger graphiteLogger = null;
-
-  private final String primaryChannel;
-
-  private List<String> channels = new LinkedList<String>();
-
   /**
-   * @param name
-   * The nick of this bot
-   *
-   * @param channels
-   * A list of channel names (each prefixed with '#')
-   *
-   * @param ircHost
-   * The hostname of the iRCd server to connect to
-   *
-   * @param ircPort
-   * The port that IRCd is listening on
-   *
-   * @param ircPassword
-   * If non-null, the given password will be used when connecting to
-   * IRCd
-   *
-   * @param graphiteEnabled
-   * If true, stats will be logged to a graphite server
-   *
-   * @param graphiteHost
-   * An optional hostname where stats will be logged (if enabled)
-   *
-   * @param graphitePort
-   * An optional port that graphite is listening on
+   * @param apiToken 
+   * The api token for this bot
    */
-  public PushBot(String name, List<String> channels,
-      boolean graphiteEnabled, String graphiteHost, int graphitePort) {
-    super();
-
-    // Configure pushbot's identity
-    setName(name);
-    setFinger(name);
-    setLogin(name);
-    setVerbose(true);
-
-    // Configure pushbot's channels
-    this.channels = channels;
-    this.primaryChannel = channels.get(0);
-
-    // Configure graphite logging
-    if(graphiteEnabled) {
-      graphiteLogger = new GraphiteLogger(graphiteHost, graphitePort);
-    }
+  public PushBot(String apiToken) {
+    super(apiToken);
   }
 
-
-  @Override
   protected void onConnect() {
-    for(String channel : channels) {
-      joinChannel(channel);
-    }
+    System.out.println("Connected");
   }
 
-  @Override
   protected void onJoin(String channel, String sender, String login, String hostname) {
+    System.out.println("Joined #" + channel + " from @" + sender);
   }
 
-  @Override
   protected void onDisconnect() {
     try {
       reconnect();
@@ -121,7 +73,6 @@ public class PushBot extends PircBot
     return status;
   }
 
-  @Override
   protected void onTopic(String channel, String topic, String setBy, long date, boolean changed) {
 
     ChannelInfo channelInfo = channelInfoMap.get(channel);
@@ -155,14 +106,6 @@ public class PushBot extends PircBot
         newPushTrain.onNewHead(this, channel, setBy);
    }
 
-   if(graphiteLogger != null) {
-    graphiteLogger.logToGraphite(channel+".queueSize",
-            newPushTrain.size());
-
-    graphiteLogger.logToGraphite(channel+".members",
-            newPushTrain.getMemberCount());
-   }
-
    channelInfo.setTopic(topic);
  }
 
@@ -177,7 +120,6 @@ public class PushBot extends PircBot
     return channelInfo.getTopic();
   }
 
-  @Override
   protected synchronized void onMessage(String channel, String sender, String login, String hostname, String message) {
 
     List<TrainCommand> trainCommands;
@@ -193,16 +135,24 @@ public class PushBot extends PircBot
 
     String topic = null;
     try {
-      topic = getTopic(channel);
+      topic = getChannelTopic(channel);
+
+      System.out.println("topic: " + topic);
     }
     catch(Exception exception) {
-      sendMessage(channel, "Sorry, I don't understand the current topic");
+      try {
+        sendMessage(channel, "Sorry, I don't understand the current topic");
+      }
+      catch (ChannelNotFoundException cne_exception){
+        System.err.println(cne_exception.getMessage());
+      }
       return;
     }
 
     PushTrain pushTrain;
     try {
         pushTrain = PushTrainReader.parse(topic);
+      System.out.println("pushtrain : " + pushTrain);
         if(pushTrain == null) {
             sendMessage(channel, "Sorry, I don't understand the current topic");
             return;
@@ -211,26 +161,23 @@ public class PushBot extends PircBot
         t.printStackTrace();
         return;
     }
+    System.out.println("channel is " + channel);
 
     for(TrainCommand trainCommand : trainCommands) {
+      System.out.println("command " + trainCommand);
       trainCommand.onCommand(this, pushTrain, channel, sender);
     }
 
-    log(pushTrain.toString());
+    System.out.println("onMessage pushtrain string" + pushTrain.toString());
 
     if(!pushTrain.toString().equals(topic)) {
+      System.out.println("trying to set topic");
       setTopic(channel, pushTrain.toString());
     }
   }
 
-  @Override
   protected void onPrivateMessage(String sender, String login, String hostname, String message) {
-    onMessage(this.primaryChannel, sender, login, hostname, message);
-  }
-
-  @Override
-  protected void onInvite(String targetNick, String sourceNick, String sourceLogin, String sourceHost, String channel) {
-      joinChannel(channel);
+    System.out.println("Got direct message from @" + sender + ": " + message);
   }
 
   public static void main(String[] args)
@@ -239,37 +186,8 @@ public class PushBot extends PircBot
     Options options = new Options();
     Option option;
 
-    option = new Option("n", "name",  true, "Name");
+    option = new Option("k", "key",  true, "Key");
     option.setRequired(true);
-    options.addOption(option);
-
-    option = new Option("c", "channels",  true, "A comma delimited set of channels to join");
-    option.setRequired(true);
-    options.addOption(option);
-
-    option = new Option("h", "irc-host",  true, "The IRCD host");
-    option.setRequired(true);
-    options.addOption(option);
-
-    option = new Option("p", "irc-port",  true, "The IRCD port");
-    option.setRequired(true);
-    options.addOption(option);
-
-    option = new Option("a", "irc-pass",  true, "IRCd Server password");
-    option.setRequired(false);
-    options.addOption(option);
-
-    option = new Option("s", "ssl",  false, "Use SSL");
-    option.setRequired(false);
-    options.addOption(option);
-
-    option = new Option("g", "graphite-enabled",  false, "Set to true to log stats to graphite");
-    options.addOption(option);
-
-    option = new Option("r", "graphite-host",  true, "Graphite server hostname");
-    options.addOption(option);
-
-    option = new Option("t", "graphite-port",  true, "Graphite server port");
     options.addOption(option);
 
     CommandLineParser parser = new PosixParser();
@@ -280,44 +198,21 @@ public class PushBot extends PircBot
     catch(ParseException exception) {
       System.err.println(exception.getMessage());
       System.err.println("Usage: " + PushBot.class + " ARGS");
-      System.err.println("  -n,--name                IRC Nick of the Bot");
-      System.err.println("  -c,--channels            Comma delimited list of channels to join");
-      System.err.println("  -h,--irc-host            IRCD hostname");
-      System.err.println("  -p,--irc-port            IRCD port");
-      System.err.println("  -a,--irc-passwod         Optional IRCD server password");
-      System.err.println("  -s,--ssl                 Connect using SSL");
-      System.err.println("  -g,--graphite-enabled    Enable graphite logging");
-      System.err.println("  -r,--graphite-host       Graphite hostname");
-      System.err.println("  -t,--graphite-port       Graphite port");
+      System.err.println("  -k,--key                   Bot API Token");
       System.exit(1);
     }
 
-    List<String> channels = new LinkedList<String>();
-    for(String channel : commandLine.getOptionValue('c').split("/\\s*,\\s*/")) {
-      channels.add(channel);
+    String apiToken = null;
+
+    if (commandLine.hasOption('k')) {
+      apiToken = commandLine.getOptionValue('k');
     }
 
-    // Build PushBot
+    // Build PushBotSlack
     PushBot pushBot =
-      new PushBot(commandLine.getOptionValue('n'),
-          channels,
-          commandLine.hasOption('g'),
-          commandLine.getOptionValue('r', null),
-          Integer.valueOf(commandLine.getOptionValue('t', "2003")));
+      new PushBot(apiToken);
 
-    SSLSocketFactory socketFactory = null;
-
-    if (commandLine.hasOption('s')) {
-        socketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
-    }
-
-    // Connect to IRCD
-    pushBot.connect(
-        commandLine.getOptionValue('h'),
-        Integer.valueOf(commandLine.getOptionValue('p')),
-        commandLine.getOptionValue('a', null),
-        socketFactory
-    );
+    pushBot.connect();
 
     // Launch the web interface
     ConfigServer configServer = new ConfigServer(pushBot);
