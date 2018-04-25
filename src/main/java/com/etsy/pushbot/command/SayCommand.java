@@ -1,6 +1,7 @@
 package com.etsy.pushbot.command;
 
 import com.etsy.pushbot.*;
+import com.etsy.ChannelNotFoundException;
 
 public class SayCommand
   extends TrainCommand {
@@ -26,7 +27,12 @@ public class SayCommand
     if (this.where == null) {
         return;
     }
-    pushBot.sendMessage(this.where, this.what);
+    try {
+        pushBot.sendMessage(this.where, this.what);
+    }
+    catch (ChannelNotFoundException cne_exception){
+        System.err.println(cne_exception.getMessage());
+    }
   }
 
   @Override

@@ -141,10 +141,10 @@ public class PushBot extends PlackBot
     }
     catch(Exception exception) {
       try {
-        sendMessage(channel, "Sorry, I don't understand the current topic");
+          sendMessage(channel, "Sorry, I don't understand the current topic");
       }
-      catch (ChannelNotFoundException cne_exception){
-        System.err.println(cne_exception.getMessage());
+      catch (ChannelNotFoundException cne_exception) {
+          System.err.println(cne_exception.getMessage());
       }
       return;
     }
