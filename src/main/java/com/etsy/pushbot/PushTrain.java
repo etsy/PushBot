@@ -5,6 +5,7 @@ import com.etsy.pushbot.tokens.MemberList;
 import com.etsy.pushbot.tokens.PushToken;
 import java.util.LinkedList;
 import com.google.common.base.Joiner;
+import com.etsy.ChannelNotFoundException;
 
 public class PushTrain extends LinkedList<PushToken>
 {
@@ -95,10 +96,20 @@ public class PushTrain extends LinkedList<PushToken>
   public void onNewHead(PushBot pushBot, String channel, String sender) {
       PushToken head = get(0);
       if(head != null && head instanceof MemberList) {
-          pushBot.sendMessage(channel, getHeadMember() + ": You're up");
+          try {
+              pushBot.sendMessage(channel, "@" + getHeadMember() + ": You're up");
+          }
+          catch (ChannelNotFoundException cne_exception) {
+              System.err.println(cne_exception.getMessage());
+          }
+
           if(isQuietPush()) {
-              pushBot.sendMessage(channel, getDriver().getName()
-                      + " has asked me to be quiet for this push");
+              try {
+                  pushBot.sendMessage(channel, getDriver().getName() + " has asked me to be quiet for this push");
+              }
+              catch (ChannelNotFoundException cne_exception){
+                  System.err.println(cne_exception.getMessage());
+              }
           }
 
           for(Member member : ((MemberList)head)) {
