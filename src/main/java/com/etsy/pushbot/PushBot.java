@@ -74,8 +74,6 @@ public class PushBot extends PlackBot
   }
 
   protected void onTopic(String channel, String topic, String setBy, long date, boolean changed) {
-    System.out.println("onTopic invoked");
-
     ChannelInfo channelInfo = channelInfoMap.get(channel);
     if(channelInfo == null) {
       channelInfoMap.put(channel, new ChannelInfo(channel));
@@ -107,7 +105,6 @@ public class PushBot extends PlackBot
         newPushTrain.onNewHead(this, channel, setBy);
    }
 
-   System.out.println("setting channelInfo topic to "+ topic);
    channelInfo.setTopic(topic);
  }
 
@@ -138,8 +135,6 @@ public class PushBot extends PlackBot
     String topic = null;
     try {
       topic = getTopic(channel);
-
-      System.out.println("current topic: '" + topic + "' for channel " + channel);
     }
     catch(Exception exception) {
       try {
@@ -154,7 +149,6 @@ public class PushBot extends PlackBot
     PushTrain pushTrain;
     try {
         pushTrain = PushTrainReader.parse(topic);
-        System.out.println("pushtrain parsed topic : " + pushTrain);
         if(pushTrain == null) {
             sendMessage(channel, "Sorry, I don't understand the current topic");
             return;
@@ -165,14 +159,11 @@ public class PushBot extends PlackBot
     }
 
     for(TrainCommand trainCommand : trainCommands) {
-      System.out.println("trainCommand " + trainCommand);
       trainCommand.onCommand(this, pushTrain, channel, sender);
     }
 
-    System.out.println("pushTrain string: " + pushTrain.toString());
 
     if(!pushTrain.toString().equals(topic)) {
-      System.out.println("trying to set topic");
       setTopic(channel, pushTrain.toString());
     }
   }
