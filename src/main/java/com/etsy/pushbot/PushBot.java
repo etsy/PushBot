@@ -137,7 +137,7 @@ public class PushBot extends PlackBot
 
     String topic = null;
     try {
-      topic = getChannelTopic(channel);
+      topic = getTopic(channel);
 
       System.out.println("current topic: '" + topic + "' for channel " + channel);
     }
