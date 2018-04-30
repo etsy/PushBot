@@ -4,6 +4,7 @@ import com.etsy.pushbot.*;
 import com.etsy.pushbot.tokens.MemberList;
 import com.etsy.pushbot.tokens.PushToken;
 import org.apache.log4j.Logger;
+import com.etsy.ChannelNotFoundException;
 
 public class AnnounceCommand
   extends TrainCommand {
@@ -48,7 +49,13 @@ public class AnnounceCommand
             if (((MemberList)token).size() > 1) {
                 msg = memberNames + ": " + msg;
             }
-            pushBot.sendMessage(channel, msg);
+            
+            try {
+                pushBot.sendMessage(channel, msg);
+            }
+            catch (ChannelNotFoundException cne_exception) {
+                System.err.println(cne_exception.getMessage());
+            }
         }
         return;
     }
