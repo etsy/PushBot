@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata modelVersion="1.1.0">
-  <groupId>com.etsy</groupId>
+  <groupId>plackbot</groupId>
   <artifactId>PlackBot</artifactId>
   <version>1.0-SNAPSHOT</version>
   <versioning>
     <snapshot>
       <localCopy>true</localCopy>
     </snapshot>
-    <lastUpdated>20180424193934</lastUpdated>
+    <lastUpdated>20180430183731</lastUpdated>
     <snapshotVersions>
       <snapshotVersion>
         <extension>jar</extension>
         <value>1.0-SNAPSHOT</value>
-        <updated>20180424193934</updated>
+        <updated>20180430183731</updated>
       </snapshotVersion>
       <snapshotVersion>
         <extension>pom</extension>
         <value>1.0-SNAPSHOT</value>
-        <updated>20180424193934</updated>
+        <updated>20180430183731</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
