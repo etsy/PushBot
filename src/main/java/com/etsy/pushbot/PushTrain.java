@@ -24,7 +24,7 @@ public class PushTrain extends LinkedList<PushToken>
       MemberList memberList = (MemberList)get(0);
       String memberListString = "";
       for(Member member : memberList) {
-        memberListString += member.getName() + " ";
+        memberListString += "<@" + member.getName() + ">" + " ";
       }
       return memberListString;
     }
@@ -97,7 +97,7 @@ public class PushTrain extends LinkedList<PushToken>
       PushToken head = get(0);
       if(head != null && head instanceof MemberList) {
           try {
-              pushBot.sendMessage(channel, "@" + getHeadMember() + ": You're up");
+              pushBot.sendMessage(channel, getHeadMember() + ": You're up");
           }
           catch (ChannelNotFoundException cne_exception) {
               System.err.println(cne_exception.getMessage());

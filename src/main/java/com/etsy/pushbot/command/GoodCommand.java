@@ -28,7 +28,7 @@ public class GoodCommand
                 member.setStatus("*");
                 if(((MemberList)token).isEveryoneReady()) {
                     try {
-                        pushBot.sendMessage(channel, "@" + pushTrain.getHeadMember() + ": everyone is ready");
+                        pushBot.sendMessage(channel, pushTrain.getHeadMember() + ": everyone is ready");
                     }
                     catch (ChannelNotFoundException cne_exception){
                         System.err.println(cne_exception.getMessage());
